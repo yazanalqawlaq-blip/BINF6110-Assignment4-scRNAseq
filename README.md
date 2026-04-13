@@ -33,3 +33,27 @@ scRNA-seq allows profiling of gene expression at the individual cell level, whic
 For the computational pipeline, I used Seurat v5 (Hao et al., 2024) for data handling, quality control, normalization, clustering, and visualization. Seurat is the most widely used framework for scRNA-seq analysis in R and supports the full workflow from raw count matrices through annotation and differential expression. For batch correction, I used Harmony (Korsunsky et al., 2019) rather than Seurat's built-in CCA or RPCA integration methods. Harmony runs substantially faster on large datasets (149,125 cells in this case) and operates in the PCA embedding space rather than requiring identification of mutual nearest neighbors, which made it more practical given the available computational resources. Both CCA and RPCA have been shown to perform comparably to Harmony in benchmark studies (Tran et al., 2020), so the choice was primarily computational. For differential expression, I used pseudobulk aggregation with DESeq2 (Love et al., 2014) rather than single-cell-level tests such as Seurat's default Wilcoxon test or MAST (Finak et al., 2015). Pseudobulk treats biological replicates rather than individual cells as the unit of analysis, which avoids the inflated false positive rates that occur when thousands of cells from the same sample are treated as independent observations (Squair et al., 2021; course lecture 18). Functional enrichment was performed with clusterProfiler (Wu et al., 2021), which I chose over alternatives such as DAVID or g:Profiler because it integrates directly with the R workflow, supports both GSEA and ORA, and allows side-by-side comparison of upregulated and downregulated gene sets via the `compareCluster()` function.
  
 ---
+ 
+## Project Structure
+ 
+```
+BINF6110-Assignment4-scRNAseq/
+├── README.md
+├── scripts/
+│   ├── 01_qc_filtering.R
+│   ├── 02_normalize_integrate_cluster.R
+│   ├── 03_find_markers.R
+│   ├── 04_annotation.R
+│   ├── 05_de_gsea.R
+│   └── 06_composition_visualization.R
+├── results/
+│   ├── cluster_markers_all.csv
+│   ├── cluster_markers_top5.csv
+│   ├── de_neutrophils_RM_naive_vs_D02.csv
+│   ├── gsea_go_neutrophils_RM_naive_vs_D02.csv
+│   └── kegg_up_neutrophils_RM_naive_vs_D02.csv
+└── figures/
+    └── (all figures referenced below)
+```
+ 
+---
