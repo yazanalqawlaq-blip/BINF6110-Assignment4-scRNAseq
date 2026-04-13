@@ -177,10 +177,41 @@ Tracking immune cell types specifically revealed that neutrophils peaked at D02,
 Pseudobulk DE analysis identified 736 differentially expressed genes (padj < 0.05) in RM neutrophils between Naive and D02. Of these, 299 were upregulated and 437 were downregulated at D02 relative to Naive. Applying a log2 fold change threshold of 1, there were 203 upregulated and 172 downregulated genes (Figure 7).
  
 The top upregulated genes at D02 included S100a9 (log2FC = 1.30, padj = 5.3e-52) and S100a8 (log2FC = 0.96, padj = 2.4e-19), which encode the two subunits of calprotectin, a damage-associated molecular pattern released during neutrophil activation and degranulation. Other highly upregulated genes included Slpi (log2FC = 2.74), a secretory leukocyte protease inhibitor with direct antiviral and antimicrobial activity; Mmp8 (log2FC = 2.85), a neutrophil collagenase stored in specific granules that facilitates tissue migration; Tnfaip2 (log2FC = 1.76), a TNF-alpha and interferon-responsive gene involved in inflammatory signaling; and Ngp (log2FC = 2.40), a neutrophil granule protein. Among the top downregulated genes were Map1lc3a (log2FC = -2.97), Rplp1 (log2FC = -0.87), and several other ribosomal protein genes, suggesting a global reduction in translational activity at D02.
+
+**Table 1. Pseudobulk sample structure for RM neutrophil DE analysis (Naive vs D02).**
+
+| Sample | Condition | Cells per sample |
+|:---|:---|:---|
+| m1_RT_Naive | Naive | 105 |
+| m2_RT_Naive | Naive | 65 |
+| m3_RT_Naive | Naive | 63 |
+| m1_RT_D02 | D02 | 231 |
+| m2_RT_D02 | D02 | 145 |
+| m3_RT_D02 | D02 | 78 |
  
 ![Figure 7](figures/volcano_neutrophils.png)
  
 **Figure 7. Volcano plot of pseudobulk DE results for RM neutrophils (D02 vs Naive).** Red points are upregulated at D02 (padj < 0.05, log2FC > 1), blue points are downregulated (padj < 0.05, log2FC < -1), grey points are not significant. Dashed lines mark the significance and fold change thresholds.
+
+**Table 2. Top 15 differentially expressed genes in RM neutrophils (D02 vs Naive).**
+
+| Gene | Log2 Fold Change | Adjusted p-value | Direction |
+|:---|:---|:---|:---|
+| S100a9 | 1.30 | 5.28e-52 | Up |
+| Slpi | 2.74 | 1.18e-41 | Up |
+| Tnfaip2 | 1.76 | 1.92e-36 | Up |
+| Gm42418 | 1.27 | 1.28e-35 | Up |
+| Plek | 1.52 | 1.35e-33 | Up |
+| Ccl6 | 2.38 | 2.86e-23 | Up |
+| S100a6 | 1.41 | 3.94e-21 | Up |
+| Ngp | 2.40 | 1.38e-20 | Up |
+| S100a8 | 0.96 | 2.40e-19 | Up |
+| Mmp8 | 2.85 | 2.56e-18 | Up |
+| Map1lc3a | -2.97 | 1.75e-14 | Down |
+| Rplp1 | -0.87 | 3.43e-14 | Down |
+| Mgst3 | -3.21 | 3.74e-14 | Down |
+| Ttll7 | -2.77 | 3.78e-14 | Down |
+| Hmgn3 | -2.88 | 1.30e-13 | Down |
  
 A heatmap of the top 30 DEGs (ranked by adjusted p-value) showed a clear separation between Naive and D02 expression profiles, with blocks of coordinately upregulated antimicrobial and inflammatory genes at D02 and coordinately downregulated translation-related genes (Figure 8).
  
@@ -197,6 +228,21 @@ Violin plots of selected neutrophil activation genes across all five timepoints 
 ### Functional Enrichment
  
 GSEA on GO Biological Process terms revealed that the most enriched upregulated pathways at D02 were defense response to other organism (NES = 1.73, padj = 1.8e-4), innate immune response (NES = 1.70, padj = 3.2e-4), and positive regulation of immune system process (NES = 1.71, padj = 1.8e-4). The most enriched downregulated pathways were cytoplasmic translation (NES = -1.91, padj = 2.5e-7), ribosome biogenesis (NES = -1.77, padj = 3.3e-5), and oxidative phosphorylation (NES = -1.71, padj = 6.1e-3) (Figure 10).
+
+**Table 3. Top 10 GSEA GO Biological Process terms in RM neutrophils (D02 vs Naive).**
+
+| GO Term | NES | Adjusted p-value | Direction |
+|:---|:---|:---|:---|
+| Cytoplasmic translation | -1.91 | 2.53e-7 | Suppressed |
+| Ribonucleoprotein complex biogenesis | -1.80 | 3.34e-5 | Suppressed |
+| Translation | -1.71 | 7.48e-5 | Suppressed |
+| Defense response to other organism | 1.73 | 1.82e-4 | Activated |
+| Positive regulation of immune system process | 1.71 | 1.82e-4 | Activated |
+| Ribosome biogenesis | -1.77 | 3.17e-4 | Suppressed |
+| Defense response to symbiont | 1.72 | 3.17e-4 | Activated |
+| Innate immune response | 1.70 | 3.17e-4 | Activated |
+| Regulation of immune response | 1.70 | 9.05e-4 | Activated |
+| Oxidative phosphorylation | -1.71 | 6.10e-3 | Suppressed |
  
 ![Figure 10](figures/gsea_dotplot.png)
  
