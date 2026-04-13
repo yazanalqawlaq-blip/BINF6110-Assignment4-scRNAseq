@@ -262,3 +262,50 @@ This analysis characterized the early neutrophil response to IAV infection in th
  
 ---
 
+## References
+ 
+Borregaard N (2010). Neutrophils, from marrow to microbes. Immunity, 33(5), 657-670.
+ 
+Brinkmann V, Reichard U, Goosmann C, Fauler B, Uhlemann Y, Weiss DS, Weinrauch Y, Zychlinsky A (2004). Neutrophil extracellular traps kill bacteria. Science, 303(5663), 1532-1535.
+ 
+Carlson M (2019). org.Mm.eg.db: Genome wide annotation for Mouse. R package version 3.8.2. Bioconductor.
+ 
+Finak G, McDavid A, Yajima M, Deng J, Gersuk V, Shalek AK, Slichter CK, Miller HW, McElrath MJ, Prlic M, Linsley PS, Gottardo R (2015). MAST: a flexible statistical framework for assessing transcriptional changes and characterizing heterogeneity in single-cell RNA sequencing data. Genome Biology, 16, 278.
+ 
+Hafemeister C, Satija R (2019). Normalization and variance stabilization of single-cell RNA-seq data using regularized negative binomial regression. Genome Biology, 20(1), 296.
+ 
+Hao Y, Stuart T, Kowalski MH, Choudhary S, Hoffman P, Hartman A, Srivastava A, Mez G, Cloke J, Satija R (2024). Dictionary learning for integrative, multimodal and scalable single-cell analysis. Nature Biotechnology, 42(2), 293-304.
+ 
+Iwasaki A, Pillai PS (2014). Innate immunity to influenza virus infection. Nature Reviews Immunology, 14(5), 315-328.
+ 
+Jovic D, Liang X, Zeng H, Lin L, Xu F, Luo Y (2022). Single-cell RNA sequencing technologies and applications: A brief overview. Clinical and Translational Medicine, 12(3), e694.
+ 
+Kazer SW, Match CM, Langan EM, Messou MA, LaSalle TJ, O'Leary E, Marbourg J, Naughton K, von Andrian UH, Ordovas-Montanes J (2024). Primary nasal influenza infection rewires tissue-scale memory response dynamics. Immunity, 57(8), 1955-1974.
+ 
+Kido H, Okumura Y, Takahashi E, Pan HY, Wang S, Yao D, Yao M, Chida J, Beppu Y (1999). Role of host cellular proteases in the pathogenesis of influenza and influenza-induced multiple organ failure. Biochimica et Biophysica Acta, 1477(1-2), 159-167.
+ 
+Korsunsky I, Millard N, Fan J, Slowikowski K, Zhang F, Wei K, Baglaenko Y, Brenner M, Loh PR, Raychaudhuri S (2019). Fast, sensitive and accurate integration of single-cell data with Harmony. Nature Methods, 16(12), 1289-1296.
+ 
+Love MI, Huber W, Anders S (2014). Moderated estimation of fold change and dispersion for RNA-seq data with DESeq2. Genome Biology, 15(12), 550.
+ 
+Narasaraju T, Yang E, Samy RP, Ng HH, Poh WP, Liew AA, Phoon MC, van Rooijen N, Chow VT (2011). Excessive neutrophils and neutrophil extracellular traps contribute to acute lung injury of influenza pneumonitis. American Journal of Pathology, 179(1), 199-210.
+ 
+Papayannopoulos V (2018). Neutrophil extracellular traps in immunity and disease. Nature Reviews Immunology, 18(2), 134-147.
+ 
+Rodriguez-Espinosa O, Rojas-Espinosa O, Moreno-Altamirano MM, Lopez-Villegas EO, Sanchez-Garcia FJ (2015). Metabolic requirements for neutrophil extracellular traps formation. Immunology, 145(2), 213-224.
+ 
+Silvin A, Chapuis N, Dunsmore G, Goubet AG, Dubuisson A, Derosa L, Almber C, Henber C, Hemon P, Herb J, et al. (2020). Elevated calprotectin and abnormal myeloid cell subsets discriminate severe from mild COVID-19. Cell, 182(6), 1401-1418.
+ 
+Squair JW, Gautier M, Kathe C, Anderson MA, James ND, Hutson TH, Hudelle R, Qaiser T, Matson KJE, Baez Q, et al. (2021). Confronting false discoveries in single-cell differential expression. Nature Communications, 12(1), 5692.
+ 
+Tate MD, Deng YM, Jones JE, Anderson GP, Brooks AG, Reading PC (2009). Neutrophils ameliorate lung injury and the development of severe disease during influenza infection. Journal of Immunology, 183(11), 7441-7450.
+ 
+Tate MD, Brooks AG, Reading PC, Mintern JD (2011). Neutrophils sustain effective CD8+ T-cell responses in the respiratory tract following influenza infection. Immunology and Cell Biology, 90(2), 197-205.
+ 
+Traag VA, Waltman L, van Eck NJ (2019). From Louvain to Leiden: guaranteeing well-connected communities. Scientific Reports, 9(1), 5233.
+ 
+Tran HTN, Ang KS, Chevrier M, Zhang X, Lee NYS, Goh M, Chen J (2020). A benchmark of batch-effect correction methods for single-cell RNA sequencing data. Genome Biology, 21(1), 12.
+ 
+Vogl T, Tenbrock K, Ludwig S, Leukert N, Ehrhardt C, van Zoelen MA, Nacken W, Foell D, van der Poll T, Sorg C, Roth J (2007). Mrp8 and Mrp14 are endogenous activators of Toll-like receptor 4, promoting lethal, endotoxin-induced shock. Nature Medicine, 13(9), 1042-1049.
+ 
+Wu T, Hu E, Xu S, Chen M, Guo P, Dai Z, Feng T, Zhou L, Tang W, Zhan L, Fu X, Liu S, Bo X, Yu G (2021). clusterProfiler 4.0: A universal enrichment tool for interpreting omics data. The Innovation, 2(3), 100141.
