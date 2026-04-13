@@ -138,23 +138,23 @@ The dataset contained 156,572 cells prior to filtering. Median UMI count was 4,9
  
 Before Harmony integration, cells clustered partially by sample identity rather than by cell type, indicating batch effects across sequencing runs (Figure 2A). After Harmony correction, cells from different samples intermixed while maintaining biologically meaningful separation by tissue region and timepoint (Figure 2B). This confirmed that batch effects were corrected without removing genuine biological variation.
  
-<img width="825" height="563" alt="Image" src="https://github.com/user-attachments/assets/88368b8b-83dd-4836-ad5e-ea84503110ba" />11
+<img width="825" height="563" alt="Image" src="https://github.com/user-attachments/assets/087d2b5a-a528-4f52-b00e-fb700c38693a" />
  
 **Figure 2A. UMAP before Harmony integration.** Cells colored by sample identity (orig.ident). Visible clustering by sample indicates batch effects.
  
-<img width="825" height="563" alt="Image" src="https://github.com/user-attachments/assets/1b357083-e4bf-4d6f-9658-02fdc6f96776" />
+<img width="825" height="525" alt="Image" src="https://github.com/user-attachments/assets/504cf524-a46c-4c61-b97c-ebfa7d743444" />
  
 **Figure 2B. UMAP after Harmony integration.** Same coloring by sample identity. Samples are now intermixed, indicating successful batch correction.
  
 Clustering at resolution 0.5 produced 38 clusters. Manual annotation using marker genes and canonical lineage markers assigned these to 27 cell types spanning immune (macrophages, monocytes, neutrophils, NK cells, T cells, B cells, dendritic cells), epithelial (basal, ciliated, secretory, goblet, tuft, squamous, ductal), neuronal (olfactory sensory neurons, sustentacular cells, Schwann cells), and stromal (fibroblasts, endothelial cells, smooth muscle) lineages (Figure 3).
  
-<img width="900" height="563" alt="Image" src="https://github.com/user-attachments/assets/470f5164-b8ea-4bfa-b2d3-a336e151cb92" />
+<img width="900" height="563" alt="Image" src="https://github.com/user-attachments/assets/3bfedf4f-5507-417a-83d0-cf15f64988ee" />
  
 **Figure 3. UMAP of the nasal mucosa colored by cell type annotation.** 149,125 cells clustered into 27 cell types at resolution 0.5. Labels are positioned at cluster centroids.
  
 Tissue-level UMAP plots confirmed that olfactory sensory neurons were concentrated in OM tissue, LNG secretory cells in the LNG, and immune cells primarily in the RM, consistent with the known anatomy of the nasal mucosa (Figure 4).
  
-<img width="825" height="563" alt="Image" src="https://github.com/user-attachments/assets/136d12f5-aa99-4d1f-9367-95637276dfb0" />
+<img width="825" height="525" alt="Image" src="https://github.com/user-attachments/assets/5cc5bde2-ae0a-456c-a2eb-c1c1a1e12faa" />
  
 **Figure 4. UMAP colored by tissue region.** RM = respiratory mucosa, OM = olfactory mucosa, LNG = lateral nasal gland. Cell type distribution matches expected tissue anatomy.
  
@@ -264,8 +264,8 @@ KEGG pathway analysis on the upregulated gene set identified three significant p
  
 Feature plots of neutrophil-associated genes on the full UMAP confirmed that S100a8 and S100a9 expression was concentrated in the neutrophil and immature neutrophil clusters, with some expression also visible in monocytes (Figure 13). Isg15 and Ifit1, two canonical interferon-stimulated genes, showed broader expression across multiple cell types including epithelial and myeloid populations, consistent with a tissue-wide type I interferon response during infection.
  
-<img width="900" height="600" alt="Image" src="https://github.com/user-attachments/assets/6d3d66ee-00f0-4c34-b91c-53e7dee14637" />
- 
+<img width="900" height="600" alt="Image" src="https://github.com/user-attachments/assets/a477d514-e8b9-4ccd-93e3-e59abb03ed3f" />
+
 **Figure 13. Feature plots of selected genes on the full nasal mucosa UMAP.** S100a8 and S100a9 expression is concentrated in neutrophil clusters. Isg15 and Ifit1 show broader interferon-stimulated expression across multiple cell types. Cxcr2 marks the neutrophil cluster specifically.
  
 ---
