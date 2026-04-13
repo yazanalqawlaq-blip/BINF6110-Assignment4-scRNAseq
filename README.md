@@ -57,3 +57,71 @@ BINF6110-Assignment4-scRNAseq/
 ```
  
 ---
+
+## Methods
+ 
+### Data Source and Experimental Design
+ 
+The dataset was obtained as a pre-processed Seurat object provided by the course instructor, originally from Kazer et al. (2024). The experiment used C57BL/6 mice infected intranasally with IAV H1N1 PR8 to restrict infection to the upper respiratory tract. Nasal mucosa tissue was collected from three anatomical regions at five timepoints: naive (uninfected), 2 days post infection (D02), 5 dpi (D05), 8 dpi (D08), and 14 dpi (D14), with three biological replicates per condition. The dataset was sequenced using 10x Genomics and processed through Cell Ranger for cell calling and gene quantification. The Seurat object as provided contained 156,572 cells and 25,129 genes with raw and normalized count matrices but no pre-computed dimensionality reductions or cluster assignments.
+ 
+### Quality Control and Filtering
+ 
+Mitochondrial gene percentages were calculated using the `PercentageFeatureSet()` function with the pattern `^mt-` (lowercase, as mouse mitochondrial genes follow this naming convention). I assessed the distributions of three standard QC metrics: number of genes detected per cell (nFeature_RNA), total UMI counts per cell (nCount_RNA), and mitochondrial percentage (percent.mt). Cells were filtered using two thresholds:
+ 
+- **nFeature_RNA > 200:** This removes empty droplets and debris. The 1st percentile of the gene count distribution was 790, but some cells had as few as 60 detected genes, which are almost certainly non-cellular barcodes. The 200-gene threshold is a widely used default in the Seurat documentation (Hao et al., 2024) and is appropriate here because the dataset was already pre-filtered during Cell Ranger processing, so most extremely low-quality barcodes had already been removed.
+- **percent.mt < 10:** This removes dying or damaged cells that have lost cytoplasmic mRNA through membrane rupture while retaining their mitochondrial transcripts. The 95th percentile of mitochondrial percentage was 9.8%, so this threshold captures approximately the top 5% of cells with the highest mitochondrial content. A threshold of 5% would have been overly aggressive for nasal tissue, which contains metabolically active glandular and neuronal cells that naturally have somewhat elevated mitochondrial gene expression.
+ 
+No upper gene count filter was applied because the maximum nFeature_RNA in the dataset was only 3,892, which is well below the range (>6,000) where doublets typically appear in 10x Genomics data. After filtering, 149,125 cells were retained out of the original 156,572 (95.2%).
+ 
+Approximately 36% of cells (54,087 out of 149,125) had blank `mouse_id` values in the metadata, meaning they could not be assigned to a specific biological replicate. These cells were tagged as "unassigned" and excluded from pseudobulk differential expression analysis, which requires replicate-level grouping, but were retained for clustering and visualization since their gene expression data is still valid.
+ 
+### Normalization, Integration, and Clustering
+ 
+Gene expression counts were normalized using log normalization via `NormalizeData()` with default parameters (scale factor = 10,000). The default scale factor normalizes each cell's total counts to 10,000 before log-transforming, which puts cells with different sequencing depths on a comparable scale. SCTransform would have been preferred for its ability to better stabilize variance across expression levels using regularized negative binomial regression (Hafemeister and Satija, 2019), but memory constraints on 149,125 cells made it impractical for local computation. Log normalization is still the standard approach used in most published scRNA-seq analyses and is adequate for the downstream analyses performed here.
+ 
+The top 3,000 most variable genes were identified with `FindVariableFeatures()` using the variance-stabilizing transformation (vst) method. I chose 3,000 rather than the Seurat default of 2,000 because this dataset spans many distinct tissue types (neuronal, epithelial, immune, stromal) across three anatomical regions, and a larger feature set helps capture the diversity of lineage-defining genes without including too much noise. Expression values were scaled using `ScaleData()` with mitochondrial percentage regressed out via the `vars.to.regress` parameter, to prevent residual mitochondrial variation from influencing clustering or principal component structure.
+ 
+PCA was run with 50 components using `RunPCA()`. An elbow plot was used to assess the number of informative dimensions. Based on the elbow plot, 30 PCs were retained for downstream steps, as the curve flattened noticeably after this point and additional components contributed minimal variance. Using fewer PCs (e.g. 15-20) would risk losing biological signal from rarer cell types, while using more (e.g. 40-50) would add noise without meaningful improvement in clustering.
+ 
+Batch effects across samples were corrected using Harmony v1.2.0 (Korsunsky et al., 2019), with `orig.ident` as the batch variable. Each `orig.ident` value represents a unique combination of tissue region, timepoint, and sequencing run, making it the appropriate grouping variable for integration. Harmony converged after 3 iterations. UMAP was computed on the Harmony-corrected embedding using 30 dimensions with default parameters (n.neighbors = 30, min.dist = 0.3). Pre- and post-integration UMAP plots were compared to verify that batch effects were corrected while biological structure was preserved.
+ 
+Clustering was performed using shared nearest neighbor (SNN) graph construction followed by the Louvain algorithm via `FindNeighbors()` and `FindClusters()`. I tested three resolution values (0.3, 0.5, and 0.8) to evaluate cluster granularity. Resolution 0.3 produced 26 clusters, which merged several biologically distinct populations. Resolution 0.8 produced 48 clusters, which over-split some populations into subsets that were not distinguishable by marker gene expression. Resolution 0.5 produced 38 clusters, which matched the expected complexity of the nasal mucosa (Kazer et al. reported 42 clusters in their analysis) and provided sufficient granularity to separate biologically distinct cell populations without excessive fragmentation. The Louvain algorithm was used rather than the Leiden algorithm because it is the Seurat default and produces comparable results for datasets of this size (Traag et al., 2019).
+ 
+### Cluster Annotation
+ 
+Cell type annotations were assigned manually by combining two sources of information. First, I ran `FindAllMarkers()` with a Wilcoxon rank-sum test on each cluster to identify genes that are differentially expressed in each cluster relative to all other clusters. To keep computation time reasonable on 149,125 cells, I downsampled to 300 cells per cluster using `max.cells.per.ident = 300`. The `min.pct` parameter was set to 0.25, meaning a gene had to be detected in at least 25% of cells in the cluster to be tested, which excludes genes expressed in too few cells to be informative markers. The `logfc.threshold` was set to 0.5, which is stricter than the Seurat default of 0.25, to focus on genes with at least a 1.4-fold expression difference and reduce the number of weakly differentially expressed genes in the output. The top 5 markers per cluster by log2 fold change were then examined for known cell-type-specific genes.
+ 
+Second, I generated feature plots for canonical lineage markers across all clusters to cross-validate the marker gene assignments. Key markers used for annotation included Cd3d/Cd3e (T cells), Cd19/Cd79a (B cells), Cd68/Adgre1 (macrophages), S100a8/S100a9 (neutrophils), Ncr1/Klrb1c (NK cells), Ly6c2/Ccr2 (monocytes), Itgax/H2-Aa (dendritic cells), Epcam/Krt5 (epithelial/basal), Foxj1 (ciliated), Muc5b (secretory/goblet), Col1a1 (fibroblasts), Pecam1 (endothelial), Omp (olfactory neurons), Mki67 (proliferating), Trpm5/Il25 (tuft cells), and Krt13 (KNIIFE cells described by Kazer et al.). The resulting annotations covered 27 distinct cell types spanning immune, epithelial, neuronal, and stromal lineages.
+ 
+### Differential Expression Analysis
+ 
+Pseudobulk differential expression was performed on neutrophils from the respiratory mucosa, comparing Naive versus D02. Only cells with valid replicate IDs (non-blank mouse_id) were included. For each biological replicate, raw UMI counts across all neutrophils belonging to that sample were summed using `GetAssayData()` on the counts layer, creating pseudobulk expression profiles. This produced 6 pseudobulk samples: 3 Naive (105, 65, and 63 cells from mice m1, m2, m3) and 3 D02 (231, 145, and 78 cells). The unequal cell numbers per replicate are expected in scRNA-seq and are handled by DESeq2's size factor normalization, which accounts for differences in library size between samples.
+ 
+DESeq2 v1.46.0 (Love et al., 2014) was used for differential testing with the design formula `~ condition`, where Naive was set as the reference level. Genes with fewer than 10 counts in fewer than 2 samples were filtered out prior to analysis. This pre-filtering step removes genes that are too lowly expressed to be reliably tested and reduces the multiple testing burden, which improves the power of the adjusted p-value correction. After filtering, 5,379 genes remained. The Wald test was used to identify differentially expressed genes, and results were extracted with a Benjamini-Hochberg adjusted p-value threshold of 0.05. Positive log2 fold change values indicate higher expression at D02 relative to Naive.
+ 
+### Functional Enrichment Analysis
+ 
+Gene set enrichment analysis (GSEA) was run using the `gseGO()` function from clusterProfiler v4.18.4 (Wu et al., 2021) on Gene Ontology Biological Process terms. Genes were ranked using a composite score of log2FoldChange multiplied by -log10(p-value), which captures both the direction and statistical significance of expression changes. This ranking approach is preferred over using log2FC alone because it downweights genes with large fold changes but poor statistical support. Gene symbols were converted to Entrez IDs using `bitr()` from the org.Mm.eg.db annotation package (Carlson, 2019); 2.75% of gene IDs failed to map and were excluded. GSEA parameters included a minimum gene set size of 15 and maximum of 500 to exclude gene sets that are either too small to produce stable enrichment scores or too broad to be biologically informative, and a p-value cutoff of 0.05.
+ 
+Over-representation analysis (ORA) was performed separately on upregulated (padj < 0.05, log2FC > 1) and downregulated (padj < 0.05, log2FC < -1) gene sets using `compareCluster()` with `enrichGO()` for GO Biological Process terms. The log2FC threshold of 1 corresponds to a 2-fold change in expression, which is a common threshold for filtering biologically meaningful changes from statistically significant but small-magnitude differences. This approach provides a side-by-side comparison of biological processes that are activated versus suppressed in neutrophils at D02. A background gene universe consisting of all tested genes was provided to avoid bias from using the full genome as background. KEGG pathway enrichment was also run on the upregulated gene set using `enrichKEGG()` with organism code "mmu" for mouse, with p-value and q-value cutoffs of 0.05 and 0.2 respectively.
+ 
+### Cell Composition Analysis
+ 
+Cell type proportions were calculated per biological replicate per timepoint in the RM tissue using only cells with valid replicate IDs. For each replicate, the number of cells assigned to each cell type was divided by the total number of cells in that replicate to produce proportions. Mean proportions and standard errors were computed across the three biological replicates at each timepoint. Stacked bar plots were generated to visualize overall composition changes across the infection time course, and line plots with error bars were used to track immune cell type proportions over time. A separate stacked bar plot was generated comparing composition across all three tissue regions (RM, OM, LNG) to confirm that tissue-specific cell type distributions matched known nasal mucosa anatomy.
+ 
+### Software Versions
+ 
+| Software | Version | Purpose |
+|:---|:---|:---|
+| R | 4.5.0 | Statistical computing |
+| Seurat | 5.3.0 | scRNA-seq data handling and clustering |
+| Harmony | 1.2.0 | Batch correction |
+| DESeq2 | 1.46.0 | Pseudobulk differential expression |
+| clusterProfiler | 4.18.4 | Functional enrichment (GSEA, ORA, KEGG) |
+| org.Mm.eg.db | 3.20.0 | Mouse gene annotation |
+| pheatmap | 1.0.12 | Heatmap visualization |
+| ggplot2 | 3.5.2 | Plotting |
+ 
+---
+
+
