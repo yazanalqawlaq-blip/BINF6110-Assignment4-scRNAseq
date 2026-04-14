@@ -58,10 +58,10 @@ VlnPlot(seu,
 
 # for pseudobulk DE we need replicate labels so we tag blanks now
 seu$replicate <- ifelse(seu@meta.data$mouse_id == "",
-                        "unassigned",
+                        "no_mouse_id",
                         seu@meta.data$mouse_id)
-cat("Cells with valid replicate ID:", sum(seu$replicate != "unassigned"), "\n")
-cat("Cells with unassigned replicate:", sum(seu$replicate == "unassigned"), "\n")
+cat("Cells with valid replicate ID:", sum(seu$replicate != "no_mouse_id"), "\n")
+cat("Cells with unassigned replicate:", sum(seu$replicate == "no_mouse_id"), "\n")
 
 # save checkpoint
 dir.create("data", showWarnings = FALSE)
