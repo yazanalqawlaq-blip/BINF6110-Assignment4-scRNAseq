@@ -1,7 +1,8 @@
 # script 06: cell composition analysis, heatmap, and violin plots
-# looking at how cell type proportions shift across infection in RM
-# and visualizing top DEGs from the neutrophil analysis
+# looking at how cell type proportions change across infection in RM
+# and plotting top DEGs from the neutrophil analysis
 
+#load packages
 library(Seurat)
 library(ggplot2)
 library(dplyr)
@@ -11,12 +12,8 @@ library(tibble)
 # load checkpoint from script 05
 seu <- readRDS("data/checkpoint_05.rds")
 
-# =========================================================
-# part 1: cell type composition over time in RM
-# =========================================================
-
-# calculate cell type proportions per replicate per timepoint in RM
-# only using cells with valid replicate IDs
+# cell type proportions per replicate per timepoint in RM
+# only cells with valid replicate IDs
 rm_props <- seu@meta.data %>%
   filter(organ_custom == "RM",
          replicate != "unassigned") %>%
@@ -46,7 +43,7 @@ ggplot(rm_mean, aes(x = time, y = mean_prop, fill = cell_type)) +
   theme(legend.text = element_text(size = 7),
         legend.key.size = unit(0.35, "cm"))
 
-# zoom in on immune cells only to see the infection dynamics more clearly
+# just immune cells to see the dynamics better
 immune_types <- c("Macrophages", "Monocytes", "Neutrophils",
                   "Immature neutrophils", "Granulocyte precursors",
                   "Dendritic cells", "NK cells", "T cells", "B cells")
@@ -81,9 +78,6 @@ ggplot(neut_props, aes(x = time, y = proportion)) +
        color = "Replicate") +
   theme_classic()
 
-# =========================================================
-# part 2: composition across all three tissue regions
-# =========================================================
 
 tissue_props <- seu@meta.data %>%
   filter(replicate != "unassigned") %>%
@@ -103,14 +97,11 @@ ggplot(tissue_props, aes(x = organ_custom, y = proportion, fill = cell_type)) +
   theme(legend.text = element_text(size = 7),
         legend.key.size = unit(0.35, "cm"))
 
-# =========================================================
-# part 3: heatmap of top DEGs in neutrophils
-# =========================================================
 
-# load the DE results we saved earlier
+# load DE results from script 05
 de_results <- read.csv("results/de_neutrophils_RM_naive_vs_D02.csv")
 
-# pick the top 30 DEGs by adjusted p-value
+# top 30 DEGs by adjusted p-value for the heatmap
 top30 <- de_results %>%
   arrange(padj) %>%
   head(30) %>%
@@ -121,7 +112,7 @@ neut_rm <- subset(seu, subset = cell_type == "Neutrophils" &
                     organ_custom == "RM" &
                     time %in% c("Naive", "D02"))
 
-# get average expression per timepoint for the heatmap
+# average expression per timepoint for the heatmap
 avg_expr <- AverageExpression(neut_rm, features = top30,
                               group.by = "time", assays = "RNA")
 mat <- as.matrix(avg_expr$RNA)
@@ -143,30 +134,22 @@ pheatmap(mat_scaled,
          fontsize_row = 8,
          color = colorRampPalette(c("#4169E1", "white", "#E34234"))(100))
 
-# =========================================================
-# part 4: violin plots of key neutrophil activation genes
-# =========================================================
 
-# subset to neutrophils in RM across all timepoints for a broader view
+# neutrophils in RM across all timepoints
 neut_all <- subset(seu, subset = cell_type == "Neutrophils" &
                      organ_custom == "RM")
 neut_all$time <- factor(neut_all$time,
                         levels = c("Naive", "D02", "D05", "D08", "D14"))
 
-# S100a8/a9 are calprotectin subunits released during neutrophil activation
-# Slpi is an antimicrobial/anti-inflammatory secretory protein
-# Mmp8 is a collagenase involved in neutrophil tissue migration
-# Cxcr2 is the main neutrophil chemokine receptor
+# violin plots of key genes across timepoints
+# S100a8/a9 = calprotectin, Slpi = protease inhibitor,
+# Mmp8 = collagenase, Cxcr2 = neutrophil chemokine receptor
 VlnPlot(neut_all, features = c("S100a8", "S100a9", "Slpi",
                                "Mmp8", "Cxcr2", "Tnfaip2"),
         group.by = "time", pt.size = 0, ncol = 3)
 
-# =========================================================
-# part 5: feature plots of genes of interest on the full UMAP
-# =========================================================
 
-# show where these neutrophil-associated genes light up across all cell types
-# this helps contextualize the neutrophil response within the whole tissue
+# feature plots to see where these genes are expressed across all cell types
 FeaturePlot(seu, reduction = "umap",
             features = c("S100a8", "S100a9", "Cxcr2",
                          "Isg15", "Ifit1", "Mmp8"),
