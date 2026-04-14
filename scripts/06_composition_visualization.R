@@ -16,7 +16,7 @@ seu <- readRDS("data/checkpoint_05.rds")
 # only cells with valid replicate IDs
 rm_props <- seu@meta.data %>%
   filter(organ_custom == "RM",
-         replicate != "unassigned") %>%
+         replicate != "no_mouse_id") %>%
   group_by(time, mouse_id, cell_type) %>%
   summarise(n = n(), .groups = "drop") %>%
   group_by(time, mouse_id) %>%
@@ -80,7 +80,7 @@ ggplot(neut_props, aes(x = time, y = proportion)) +
 
 
 tissue_props <- seu@meta.data %>%
-  filter(replicate != "unassigned") %>%
+  filter(replicate != "no_mouse_id") %>%
   group_by(organ_custom, cell_type) %>%
   summarise(n = n(), .groups = "drop") %>%
   group_by(organ_custom) %>%
