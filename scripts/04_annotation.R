@@ -1,18 +1,15 @@
 # script 04: apply cell type annotations
 # annotations based on top marker genes from FindAllMarkers
-# cross-referenced with canonical markers from the feature plots
-# and known cell types from Kazer et al. (2024)
+# cross-referenced with canonical markers from the feature plots and known cell types from Kazer et al
 
+#load packages
 library(Seurat)
 library(ggplot2)
 library(dplyr)
 
 # load checkpoint from script 03
 seu <- readRDS("data/checkpoint_03.rds")
-
 Idents(seu) <- "RNA_snn_res.0.5"
-
-
 cluster_labels <- c(
   "0"  = "Olfactory sensory neurons",
   "1"  = "Macrophages",
@@ -54,7 +51,7 @@ cluster_labels <- c(
   "37" = "Sustentacular cells"
 )
 
-# applying annotations
+# apply the labels
 labels <- cluster_labels[as.character(Idents(seu))]
 names(labels) <- names(Idents(seu))
 seu$cell_type <- labels
@@ -71,16 +68,15 @@ DimPlot(seu, reduction = "umap", group.by = "cell_type",
   theme(legend.text = element_text(size = 7))
 
 # check how many T cells we have in RM at each timepoint
-# this tells us if pseudobulk DE on T cells is feasible
+# need to know if pseudobulk DE on T cells works
 cat("\nT cells in RM by timepoint:\n")
 t_rm <- seu@meta.data %>%
   filter(cell_type == "T cells" & organ_custom == "RM")
 print(table(t_rm$time))
-
 cat("\nT cells in RM by timepoint and replicate:\n")
 print(table(t_rm$time, t_rm$mouse_id))
 
-# also check neutrophils in RM as a backup option
+# also check neutrophils in RM as a backup
 cat("\nNeutrophils in RM by timepoint:\n")
 n_rm <- seu@meta.data %>%
   filter(cell_type == "Neutrophils" & organ_custom == "RM")
@@ -88,5 +84,4 @@ print(table(n_rm$time))
 
 # save checkpoint
 saveRDS(seu, "data/checkpoint_04.rds")
-
 cat("\nScript 04 done.\n")
