@@ -166,7 +166,7 @@ Cell type proportions in the RM changed a lot over the course of infection (Figu
  
 **Figure 5. Cell type composition in the respiratory mucosa over the course of IAV infection.** Stacked bar plot showing mean cell type proportions at each timepoint. Immune cell populations expand during active infection (D02 through D08) and begin resolving by D14.
  
-Cell type proportions in the RM also revealed a stepwise immune infiltration pattern, where neutrophils peaked at D02, monocytes at D05, and macrophages accumulated later at D08 and D14, consistent with what Kazer et al. (2024) described as a sequential innate-to-adaptive transition during primary IAV infection. Tracking neutrophil proportions per biological replicate across the time course confirmed that the D02 peak was consistent across all three replicates, with the largest increase occurring between Naive and D02 (Figure 6). This motivated the choice of Naive vs D02 as the comparison for differential expression analysis.
+Cell type proportions in the RM also showed a stepwise immune infiltration pattern, where neutrophils peaked at D02, monocytes at D05, and macrophages built up later at D08 and D14, lining up with what Kazer et al. (2024) described as a sequential innate-to-adaptive transition during primary IAV infection. Tracking neutrophil proportions per biological replicate across the time course showed that the D02 peak was consistent across all three replicates, with the biggest increase between Naive and D02 (Figure 6). This is why I chose Naive vs D02 as the comparison for differential expression analysis.
 
 <img width="825" height="563" alt="Image" src="https://github.com/user-attachments/assets/5e7f9698-d0a4-458c-9483-9a63c851d5fc" />
 
