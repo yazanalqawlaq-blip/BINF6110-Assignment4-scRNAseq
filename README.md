@@ -132,7 +132,7 @@ The dataset had 156,572 cells before filtering. Median UMI count was 4,983 per c
 
 <img width="900" height="525" alt="Image" src="https://github.com/user-attachments/assets/bf6f7477-0cdd-4665-8d07-5c5e8244604f" />
  
-**Figure 1. QC metric distributions before filtering.** Violin plots of genes detected (nFeature_RNA), UMI counts (nCount_RNA), and mitochondrial percentage (percent.mt) across timepoints. Most cells fall within acceptable ranges, with a small tail of high-mitochondrial and low-gene-count cells that were removed during filtering.
+**Figure 1. QC metric distributions before filtering.** Violin plots of genes detected (nFeature_RNA), UMI counts (nCount_RNA), and mitochondrial percentage (percent.mt) across timepoints. Most cells look fine, with a few high-mitochondrial and low-gene-count outliers that got removed by filtering.
  
 ### Integration and Clustering
  
@@ -144,7 +144,7 @@ Before Harmony integration, cells clustered partly by sample identity instead of
  
 <img width="825" height="525" alt="Image" src="https://github.com/user-attachments/assets/504cf524-a46c-4c61-b97c-ebfa7d743444" />
  
-**Figure 2B. UMAP after Harmony integration.** Same coloring by sample identity. Samples are now intermixed, indicating successful batch correction.
+**Figure 2B. UMAP after Harmony integration.** Same coloring by sample identity. Samples now mix together, showing batch correction worked.
  
 Clustering at resolution 0.5 gave 38 clusters. I annotated these manually using marker genes and canonical lineage markers, ending up with 27 cell types across immune (macrophages, monocytes, neutrophils, NK cells, T cells, B cells, dendritic cells), epithelial (basal, ciliated, secretory, goblet, tuft, squamous, ductal), neuronal (olfactory sensory neurons, sustentacular cells, Schwann cells), and stromal (fibroblasts, endothelial cells, smooth muscle) lineages (Figure 3).
 
@@ -152,7 +152,7 @@ Clustering at resolution 0.5 gave 38 clusters. I annotated these manually using 
  
 **Figure 3. UMAP of the nasal mucosa colored by cell type annotation.** 149,125 cells clustered into 27 cell types at resolution 0.5. Labels are positioned at cluster centroids.
  
-Tissue-level UMAP plots confirmed that olfactory sensory neurons were concentrated in OM tissue, LNG secretory cells in the LNG, and immune cells primarily in the RM, consistent with the known anatomy of the nasal mucosa (Figure 4).
+Tissue-level UMAP plots showed that olfactory sensory neurons were concentrated in OM tissue, LNG secretory cells in the LNG, and immune cells primarily in the RM, consistent with the known anatomy of the nasal mucosa (Figure 4).
  
 <img width="825" height="525" alt="Image" src="https://github.com/user-attachments/assets/5cc5bde2-ae0a-456c-a2eb-c1c1a1e12faa" />
  
@@ -164,7 +164,7 @@ Cell type proportions in the RM changed a lot over the course of infection (Figu
 
 <img width="825" height="638" alt="Image" src="https://github.com/user-attachments/assets/26ed3b7a-5fc2-4e31-a605-b1ecbf5accae" />
  
-**Figure 5. Cell type composition in the respiratory mucosa over the course of IAV infection.** Stacked bar plot showing mean cell type proportions at each timepoint. Immune cell populations expand during active infection (D02 through D08) and begin resolving by D14.
+**Figure 5. Cell type composition in the respiratory mucosa over the course of IAV infection.** Stacked bar plot showing mean cell type proportions at each timepoint. Immune populations expand during active infection (D02 through D08) and start going back down by D14.
  
 Cell type proportions in the RM also showed a stepwise immune infiltration pattern, where neutrophils peaked at D02, monocytes at D05, and macrophages built up later at D08 and D14, lining up with what Kazer et al. (2024) described as a sequential innate-to-adaptive transition during primary IAV infection. Tracking neutrophil proportions per biological replicate across the time course showed that the D02 peak was consistent across all three replicates, with the biggest increase between Naive and D02 (Figure 6). This is why I chose Naive vs D02 as the comparison for differential expression analysis.
 
@@ -213,7 +213,7 @@ The top upregulated genes at D02 included S100a9 (log2FC = 1.30, padj = 5.3e-52)
 | Ttll7 | -2.77 | 3.78e-14 | Down |
 | Hmgn3 | -2.88 | 1.30e-13 | Down |
  
-A heatmap of the top 30 DEGs (ranked by adjusted p-value) showed a clear separation between Naive and D02 expression profiles, with blocks of coordinately upregulated antimicrobial and inflammatory genes at D02 and coordinately downregulated translation-related genes (Figure 8).
+A heatmap of the top 30 DEGs (ranked by adjusted p-value) showed a clear separation between Naive and D02 expression profiles, with antimicrobial and inflammatory genes upregulated together at D02 and translation-related genes downregulated together (Figure 8).
  
 <img width="750" height="525" alt="Image" src="https://github.com/user-attachments/assets/33b2e574-403f-4b96-8a6f-18fe134b5948" />
  
@@ -223,7 +223,7 @@ Violin plots of selected neutrophil activation genes across all five timepoints 
 
 <img width="900" height="600" alt="Image" src="https://github.com/user-attachments/assets/b958c206-a854-48bf-87d4-33617f0a7b4b" />
  
-**Figure 9. Violin plots of key neutrophil activation genes across infection timepoints (RM tissue).** Expression is shown for all neutrophils in RM at each timepoint. S100a8, S100a9, and Slpi are markedly upregulated during active infection (D02 through D08).
+**Figure 9. Violin plots of key neutrophil activation genes across infection timepoints (RM tissue).** Expression is shown for all neutrophils in RM at each timepoint. S100a8, S100a9, and Slpi are clearly upregulated during active infection (D02 through D08).
  
 ### Functional Enrichment
  
@@ -258,11 +258,11 @@ KEGG pathway analysis on the upregulated gene set found three significant pathwa
 
 <img width="750" height="525" alt="Image" src="https://github.com/user-attachments/assets/1db746f4-a28d-4330-9c54-2f75e74e1f97" />
  
-**Figure 12. KEGG pathway enrichment for genes upregulated at D02 in RM neutrophils.** Neutrophil extracellular trap formation is among the top enriched pathways, consistent with the expected early neutrophil effector response to IAV.
+**Figure 12. KEGG pathway enrichment for genes upregulated at D02 in RM neutrophils.** Neutrophil extracellular trap formation is among the top enriched pathways, which fits with the early neutrophil effector response to IAV.
  
 ### Feature Plots
  
-Feature plots of neutrophil-associated genes on the full UMAP confirmed that S100a8 and S100a9 expression was concentrated in the neutrophil and immature neutrophil clusters, with some expression also visible in monocytes (Figure 13). Isg15 and Ifit1, two canonical interferon-stimulated genes, showed broader expression across multiple cell types including epithelial and myeloid populations, consistent with a tissue-wide type I interferon response during infection.
+Feature plots of neutrophil-associated genes on the full UMAP showed that S100a8 and S100a9 expression was concentrated in the neutrophil and immature neutrophil clusters, with some expression also visible in monocytes (Figure 13). Isg15 and Ifit1, two canonical interferon-stimulated genes, showed broader expression across multiple cell types including epithelial and myeloid populations, fitting with a tissue-wide type I interferon response during infection.
  
 <img width="900" height="600" alt="Image" src="https://github.com/user-attachments/assets/a477d514-e8b9-4ccd-93e3-e59abb03ed3f" />
 
