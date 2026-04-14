@@ -1,8 +1,8 @@
 # script 05: pseudobulk differential expression and functional enrichment
-# comparing neutrophils in RM between naive and D02 (peak viral load)
-# neutrophils are the earliest innate responders during IAV infection
-# pseudobulk approach aggregates cells per replicate to avoid inflated p-values
+# comparing neutrophils in RM between naive and D02 
+# using pseudobulk to aggregate cells per replicate so we dont inflate p-values
 
+#loading packages
 library(Seurat)
 library(ggplot2)
 library(dplyr)
@@ -17,7 +17,7 @@ library(tibble)
 seu <- readRDS("data/checkpoint_04.rds")
 
 # subset to neutrophils in RM, naive and D02 only
-# also drop cells with no replicate ID since DESeq2 needs replicates
+# drop cells with no replicate ID since DESeq2 needs replicates
 neut_rm <- subset(seu, subset = cell_type == "Neutrophils" &
                     organ_custom == "RM" &
                     time %in% c("Naive", "D02") &
@@ -26,7 +26,7 @@ neut_rm <- subset(seu, subset = cell_type == "Neutrophils" &
 cat("Cells per condition and replicate:\n")
 print(table(neut_rm$time, neut_rm$mouse_id))
 
-# create a pseudobulk ID that combines replicate and timepoint
+# pseudobulk ID combining replicate and timepoint
 neut_rm$pseudobulk_id <- paste(neut_rm$mouse_id, neut_rm$time, sep = "_")
 
 # aggregate raw counts per pseudobulk sample
@@ -40,7 +40,7 @@ pseudobulk_counts <- sapply(unique(neut_rm$pseudobulk_id), function(id) {
 cat("\nCells per pseudobulk sample:\n")
 print(table(neut_rm$pseudobulk_id))
 
-# build sample metadata for DESeq2
+# sample metadata for DESeq2
 sample_meta <- data.frame(
   pseudobulk_id = colnames(pseudobulk_counts)
 ) %>%
@@ -64,11 +64,11 @@ dds <- DESeqDataSetFromMatrix(
 # keep genes with at least 10 counts in at least 2 samples
 keep <- rowSums(counts(dds) >= 10) >= 2
 dds <- dds[keep, ]
-cat("\nGenes after low-expression filter:", nrow(dds), "\n")
+cat("\nGenes after filtering:", nrow(dds), "\n")
 
 dds <- DESeq(dds, test = "Wald")
 
-# extract results: positive log2FC means upregulated at D02
+#get results, positive log2FC = upregulated at D02
 res <- results(dds, contrast = c("condition", "D02", "Naive"), alpha = 0.05)
 
 res_df <- as.data.frame(res) %>%
@@ -85,7 +85,7 @@ print(head(res_df, 20))
 dir.create("results", showWarnings = FALSE)
 write.csv(res_df, "results/de_neutrophils_RM_naive_vs_D02.csv", row.names = FALSE)
 
-# volcano plot
+#volcano plot
 res_df <- res_df %>%
   mutate(
     de_status = case_when(
@@ -112,14 +112,14 @@ ggplot(res_df, aes(x = log2FoldChange, y = -log10(padj), color = de_status)) +
   theme_classic() +
   theme(legend.position = "top")
 
-# prepare ranked gene list for GSEA
-# ranking by log2FC * -log10(pvalue) to capture both direction and significance
+#ranked gene list for GSEA
+#rank by log2FC * -log10(pvalue) to weigh both direction and significance
 gsea_input <- res_df %>%
   filter(!is.na(log2FoldChange), !is.na(pvalue)) %>%
   mutate(rank_score = log2FoldChange * -log10(pvalue + 1e-300)) %>%
   arrange(desc(rank_score))
 
-# convert gene symbols to entrez IDs
+#convert gene symbols to entrez IDs
 gene_ids <- bitr(gsea_input$gene,
                  fromType = "SYMBOL",
                  toType = "ENTREZID",
@@ -133,7 +133,7 @@ gsea_input <- gsea_input %>%
 gene_list <- gsea_input$rank_score
 names(gene_list) <- gsea_input$ENTREZID
 
-# run GSEA on GO biological process terms
+#GSEA on GO biological process terms
 gsea_go <- gseGO(geneList = gene_list,
                  OrgDb = org.Mm.eg.db,
                  ont = "BP",
@@ -149,7 +149,7 @@ print(head(as.data.frame(gsea_go)[, c("Description", "NES", "pvalue", "p.adjust"
 write.csv(as.data.frame(gsea_go),
           "results/gsea_go_neutrophils_RM_naive_vs_D02.csv", row.names = FALSE)
 
-# gsea dotplot split by activated vs suppressed
+# dotplot split by activated vs suppressed
 dotplot(gsea_go, showCategory = 15, split = ".sign") +
   facet_grid(. ~ .sign) +
   ggtitle("GSEA GO:BP - Neutrophils (RM): D02 vs Naive")
@@ -159,8 +159,8 @@ gseaplot2(gsea_go,
           geneSetID = gsea_go@result$ID[1],
           title = gsea_go@result$Description[1])
 
-# ORA on upregulated and downregulated genes separately using compareCluster
-# this gives a nice side-by-side view of what pathways are going up vs down
+#ORA on upregulated and downregulated genes separately
+#compareCluster gives a side by side of whats going up vs down
 up_genes <- res_df %>%
   filter(padj < 0.05 & log2FoldChange > 1) %>%
   left_join(gene_ids, by = c("gene" = "SYMBOL")) %>%
@@ -185,7 +185,7 @@ all_genes <- res_df %>%
 cat("\nUpregulated genes for ORA:", length(up_genes), "\n")
 cat("Downregulated genes for ORA:", length(down_genes), "\n")
 
-# compareCluster splits the enrichment by up/down direction
+# compareCluster splits enrichment by up/down
 compare_go <- compareCluster(
   geneCluster = list(Upregulated = up_genes, Downregulated = down_genes),
   fun = "enrichGO",
@@ -201,7 +201,7 @@ compare_go <- compareCluster(
 dotplot(compare_go, showCategory = 10) +
   ggtitle("GO:BP ORA - Up vs Down in D02 Neutrophils (RM)")
 
-# KEGG pathway enrichment on upregulated genes
+# KEGG on upregulated genes
 kegg_up <- enrichKEGG(gene = up_genes,
                       organism = "mmu",
                       pvalueCutoff = 0.05,
