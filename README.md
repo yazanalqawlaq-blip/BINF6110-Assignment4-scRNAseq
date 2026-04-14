@@ -166,11 +166,15 @@ Cell type proportions in the RM changed a lot over the course of infection (Figu
  
 **Figure 5. Cell type composition in the respiratory mucosa over the course of IAV infection.** Stacked bar plot showing mean cell type proportions at each timepoint. Immune cell populations expand during active infection (D02 through D08) and begin resolving by D14.
  
-Tracking immune cell types specifically showed that neutrophils peaked at D02, monocytes at D05, and macrophages built up later at D08 and D14. This stepwise pattern lines up with what Kazer et al. (2024) described as a sequential innate-to-adaptive transition during primary IAV infection.
+Cell type proportions in the RM also revealed a stepwise immune infiltration pattern, where neutrophils peaked at D02, monocytes at D05, and macrophages accumulated later at D08 and D14, consistent with what Kazer et al. (2024) described as a sequential innate-to-adaptive transition during primary IAV infection. Tracking neutrophil proportions per biological replicate across the time course confirmed that the D02 peak was consistent across all three replicates, with the largest increase occurring between Naive and D02 (Figure 6). This motivated the choice of Naive vs D02 as the comparison for differential expression analysis.
+
+<img width="825" height="563" alt="Image" src="https://github.com/user-attachments/assets/5e7f9698-d0a4-458c-9483-9a63c851d5fc" />
+
+**Figure 6. Neutrophil proportion per replicate over IAV infection (RM).** Each point represents one biological replicate. Dashed line shows the mean across replicates. Neutrophils peak at D02 during peak viral load and decline through later timepoints.
  
 ### Differential Expression: Neutrophils in RM, Naive vs D02
  
-Pseudobulk DE analysis found 736 differentially expressed genes (padj < 0.05) in RM neutrophils between Naive and D02. Of these, 299 were upregulated and 437 were downregulated at D02 relative to Naive. With a log2 fold change threshold of 1, there were 203 upregulated and 172 downregulated genes (Figure 6).
+Pseudobulk DE analysis found 736 differentially expressed genes (padj < 0.05) in RM neutrophils between Naive and D02. Of these, 299 were upregulated and 437 were downregulated at D02 relative to Naive. With a log2 fold change threshold of 1, there were 203 upregulated and 172 downregulated genes (Figure 7).
  
 The top upregulated genes at D02 included S100a9 (log2FC = 1.30, padj = 5.3e-52) and S100a8 (log2FC = 0.96, padj = 2.4e-19), which encode the two subunits of calprotectin, a DAMP released during neutrophil activation and degranulation. Other highly upregulated genes included Slpi (log2FC = 2.74), a secretory leukocyte protease inhibitor with direct antiviral and antimicrobial activity; Mmp8 (log2FC = 2.85), a neutrophil collagenase stored in specific granules that helps with tissue migration; Tnfaip2 (log2FC = 1.76), a TNF-alpha and interferon-responsive gene involved in inflammatory signaling; and Ngp (log2FC = 2.40), a neutrophil granule protein. Among the top downregulated genes were Map1lc3a (log2FC = -2.97), Rplp1 (log2FC = -0.87), and several other ribosomal protein genes, pointing to a global drop in translational activity at D02.
 
@@ -187,7 +191,7 @@ The top upregulated genes at D02 included S100a9 (log2FC = 1.30, padj = 5.3e-52)
  
 <img width="750" height="525" alt="Image" src="https://github.com/user-attachments/assets/7b205082-81fa-4f87-8559-35b2bc8ddda9" />
  
-**Figure 6. Volcano plot of pseudobulk DE results for RM neutrophils (D02 vs Naive).** Red points are upregulated at D02 (padj < 0.05, log2FC > 1), blue points are downregulated (padj < 0.05, log2FC < -1), grey points are not significant. Dashed lines mark the significance and fold change thresholds.
+**Figure 7. Volcano plot of pseudobulk DE results for RM neutrophils (D02 vs Naive).** Red points are upregulated at D02 (padj < 0.05, log2FC > 1), blue points are downregulated (padj < 0.05, log2FC < -1), grey points are not significant. Dashed lines mark the significance and fold change thresholds.
 
 **Table 2. Top 15 differentially expressed genes in RM neutrophils (D02 vs Naive).**
 
@@ -209,21 +213,21 @@ The top upregulated genes at D02 included S100a9 (log2FC = 1.30, padj = 5.3e-52)
 | Ttll7 | -2.77 | 3.78e-14 | Down |
 | Hmgn3 | -2.88 | 1.30e-13 | Down |
  
-A heatmap of the top 30 DEGs (ranked by adjusted p-value) showed a clear separation between Naive and D02 expression profiles, with blocks of coordinately upregulated antimicrobial and inflammatory genes at D02 and coordinately downregulated translation-related genes (Figure 7).
+A heatmap of the top 30 DEGs (ranked by adjusted p-value) showed a clear separation between Naive and D02 expression profiles, with blocks of coordinately upregulated antimicrobial and inflammatory genes at D02 and coordinately downregulated translation-related genes (Figure 8).
  
 <img width="750" height="525" alt="Image" src="https://github.com/user-attachments/assets/33b2e574-403f-4b96-8a6f-18fe134b5948" />
  
-**Figure 7. Heatmap of the top 30 differentially expressed genes in RM neutrophils.** Row-scaled average expression at Naive and D02. Blue indicates lower relative expression, red indicates higher. Rows are hierarchically clustered.
+**Figure 8. Heatmap of the top 30 differentially expressed genes in RM neutrophils.** Row-scaled average expression at Naive and D02. Blue indicates lower relative expression, red indicates higher. Rows are hierarchically clustered.
  
-Violin plots of selected neutrophil activation genes across all five timepoints showed that S100a8, S100a9, and Slpi expression was elevated at D02 and stayed high through D05 and D08 before dropping at D14 (Figure 8). Cxcr2, the primary neutrophil chemokine receptor, had fairly stable expression across timepoints, which makes sense since it is a constitutive surface marker and not an activation-induced gene.
+Violin plots of selected neutrophil activation genes across all five timepoints showed that S100a8, S100a9, and Slpi expression was elevated at D02 and stayed high through D05 and D08 before dropping at D14 (Figure 9). Cxcr2, the primary neutrophil chemokine receptor, had fairly stable expression across timepoints, which makes sense since it is a constitutive surface marker and not an activation-induced gene.
 
 <img width="900" height="600" alt="Image" src="https://github.com/user-attachments/assets/b958c206-a854-48bf-87d4-33617f0a7b4b" />
  
-**Figure 8. Violin plots of key neutrophil activation genes across infection timepoints (RM tissue).** Expression is shown for all neutrophils in RM at each timepoint. S100a8, S100a9, and Slpi are markedly upregulated during active infection (D02 through D08).
+**Figure 9. Violin plots of key neutrophil activation genes across infection timepoints (RM tissue).** Expression is shown for all neutrophils in RM at each timepoint. S100a8, S100a9, and Slpi are markedly upregulated during active infection (D02 through D08).
  
 ### Functional Enrichment
  
-GSEA on GO Biological Process terms showed that the most enriched upregulated pathways at D02 were defense response to other organism (NES = 1.73, padj = 1.8e-4), innate immune response (NES = 1.70, padj = 3.2e-4), and positive regulation of immune system process (NES = 1.71, padj = 1.8e-4). The most enriched downregulated pathways were cytoplasmic translation (NES = -1.91, padj = 2.5e-7), ribosome biogenesis (NES = -1.77, padj = 3.3e-5), and oxidative phosphorylation (NES = -1.71, padj = 6.1e-3) (Figure 9).
+GSEA on GO Biological Process terms showed that the most enriched upregulated pathways at D02 were defense response to other organism (NES = 1.73, padj = 1.8e-4), innate immune response (NES = 1.70, padj = 3.2e-4), and positive regulation of immune system process (NES = 1.71, padj = 1.8e-4). The most enriched downregulated pathways were cytoplasmic translation (NES = -1.91, padj = 2.5e-7), ribosome biogenesis (NES = -1.77, padj = 3.3e-5), and oxidative phosphorylation (NES = -1.71, padj = 6.1e-3) (Figure 10).
 
 **Table 3. Top 10 GSEA GO Biological Process terms in RM neutrophils (D02 vs Naive).**
 
@@ -242,27 +246,27 @@ GSEA on GO Biological Process terms showed that the most enriched upregulated pa
  
 <img width="900" height="675" alt="Image" src="https://github.com/user-attachments/assets/4d31f442-0cbf-4d61-966b-096ce9a70134" />
  
-**Figure 9. GSEA dotplot of GO Biological Process terms, split by activated and suppressed pathways.** D02 neutrophils show upregulation of immune defense and inflammatory pathways and downregulation of translation and ribosome-related pathways.
+**Figure 10. GSEA dotplot of GO Biological Process terms, split by activated and suppressed pathways.** D02 neutrophils show upregulation of immune defense and inflammatory pathways and downregulation of translation and ribosome-related pathways.
  
-Comparing upregulated and downregulated gene sets using ORA with `compareCluster()` backed this up from a different angle. Upregulated genes were enriched for GO terms related to defense response and cytokine signaling, while downregulated genes were enriched for translation, ribosome assembly, and mitochondrial gene expression (Figure 10).
+Comparing upregulated and downregulated gene sets using ORA with `compareCluster()` backed this up from a different angle. Upregulated genes were enriched for GO terms related to defense response and cytokine signaling, while downregulated genes were enriched for translation, ribosome assembly, and mitochondrial gene expression (Figure 11).
 
 <img width="900" height="675" alt="Image" src="https://github.com/user-attachments/assets/f481f604-476e-4610-8fca-c6efd3287e94" />
  
-**Figure 10. GO:BP ORA comparing upregulated and downregulated gene sets in D02 neutrophils.** Dotplot from compareCluster showing the top enriched biological processes in each direction.
+**Figure 11. GO:BP ORA comparing upregulated and downregulated gene sets in D02 neutrophils.** Dotplot from compareCluster showing the top enriched biological processes in each direction.
  
-KEGG pathway analysis on the upregulated gene set found three significant pathways: Epstein-Barr virus infection (padj = 9.3e-6), Proteoglycans in cancer (padj = 1.5e-2), and Neutrophil extracellular trap formation (padj = 1.5e-2) (Figure 11). The Epstein-Barr virus infection KEGG pathway has a lot of interferon-stimulated genes and NF-kB signaling components that overlap with antiviral innate immune responses in general, so it shows up here even though the infection is influenza and not EBV. The NET formation pathway is directly relevant to neutrophil effector biology at D02.
+KEGG pathway analysis on the upregulated gene set found three significant pathways: Epstein-Barr virus infection (padj = 9.3e-6), Proteoglycans in cancer (padj = 1.5e-2), and Neutrophil extracellular trap formation (padj = 1.5e-2) (Figure 12). The Epstein-Barr virus infection KEGG pathway has a lot of interferon-stimulated genes and NF-kB signaling components that overlap with antiviral innate immune responses in general, so it shows up here even though the infection is influenza and not EBV. The NET formation pathway is directly relevant to neutrophil effector biology at D02.
 
 <img width="750" height="525" alt="Image" src="https://github.com/user-attachments/assets/1db746f4-a28d-4330-9c54-2f75e74e1f97" />
  
-**Figure 11. KEGG pathway enrichment for genes upregulated at D02 in RM neutrophils.** Neutrophil extracellular trap formation is among the top enriched pathways, consistent with the expected early neutrophil effector response to IAV.
+**Figure 12. KEGG pathway enrichment for genes upregulated at D02 in RM neutrophils.** Neutrophil extracellular trap formation is among the top enriched pathways, consistent with the expected early neutrophil effector response to IAV.
  
 ### Feature Plots
  
-Feature plots of neutrophil-associated genes on the full UMAP confirmed that S100a8 and S100a9 expression was concentrated in the neutrophil and immature neutrophil clusters, with some expression also visible in monocytes (Figure 12). Isg15 and Ifit1, two canonical interferon-stimulated genes, showed broader expression across multiple cell types including epithelial and myeloid populations, consistent with a tissue-wide type I interferon response during infection.
+Feature plots of neutrophil-associated genes on the full UMAP confirmed that S100a8 and S100a9 expression was concentrated in the neutrophil and immature neutrophil clusters, with some expression also visible in monocytes (Figure 13). Isg15 and Ifit1, two canonical interferon-stimulated genes, showed broader expression across multiple cell types including epithelial and myeloid populations, consistent with a tissue-wide type I interferon response during infection.
  
 <img width="900" height="600" alt="Image" src="https://github.com/user-attachments/assets/a477d514-e8b9-4ccd-93e3-e59abb03ed3f" />
 
-**Figure 12. Feature plots of selected genes on the full nasal mucosa UMAP.** S100a8 and S100a9 expression is concentrated in neutrophil clusters. Isg15 and Ifit1 show broader interferon-stimulated expression across multiple cell types. Cxcr2 marks the neutrophil cluster specifically.
+**Figure 13. Feature plots of selected genes on the full nasal mucosa UMAP.** S100a8 and S100a9 expression is concentrated in neutrophil clusters. Isg15 and Ifit1 show broader interferon-stimulated expression across multiple cell types. Cxcr2 marks the neutrophil cluster specifically.
  
 ---
 
