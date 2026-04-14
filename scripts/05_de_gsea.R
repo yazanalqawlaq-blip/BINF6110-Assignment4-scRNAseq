@@ -21,7 +21,7 @@ seu <- readRDS("data/checkpoint_04.rds")
 neut_rm <- subset(seu, subset = cell_type == "Neutrophils" &
                     organ_custom == "RM" &
                     time %in% c("Naive", "D02") &
-                    replicate != "unassigned")
+                    replicate != "no_mouse_id")
 
 cat("Cells per condition and replicate:\n")
 print(table(neut_rm$time, neut_rm$mouse_id))
@@ -41,22 +41,21 @@ cat("\nCells per pseudobulk sample:\n")
 print(table(neut_rm$pseudobulk_id))
 
 # sample metadata for DESeq2
-sample_meta <- data.frame(
+pb_metadata <- data.frame(
   pseudobulk_id = colnames(pseudobulk_counts)
 ) %>%
   mutate(
     time = ifelse(grepl("Naive", pseudobulk_id), "Naive", "D02"),
     condition = factor(time, levels = c("Naive", "D02"))
   )
-rownames(sample_meta) <- sample_meta$pseudobulk_id
-
+rownames(pb_metadata) <- pb_metadata$pseudobulk_id
 cat("\nSample metadata:\n")
-print(sample_meta)
+print(pb_metadata)
 
 # run DESeq2
 dds <- DESeqDataSetFromMatrix(
   countData = pseudobulk_counts,
-  colData = sample_meta,
+  colData = pb_metadata,
   design = ~ condition
 )
 
@@ -100,8 +99,8 @@ print(table(res_df$de_status))
 
 ggplot(res_df, aes(x = log2FoldChange, y = -log10(padj), color = de_status)) +
   geom_point(alpha = 0.6, size = 1.5) +
-  scale_color_manual(values = c("Upregulated at D02" = "#E34234",
-                                "Downregulated at D02" = "#4169E1",
+  scale_color_manual(values = c("Upregulated at D02" = "firebrick",
+                                "Downregulated at D02" = "steelblue",
                                 "Not significant" = "grey60")) +
   geom_vline(xintercept = c(-1, 1), linetype = "dashed", color = "grey40") +
   geom_hline(yintercept = -log10(0.05), linetype = "dashed", color = "grey40") +
@@ -114,27 +113,25 @@ ggplot(res_df, aes(x = log2FoldChange, y = -log10(padj), color = de_status)) +
 
 #ranked gene list for GSEA
 #rank by log2FC * -log10(pvalue) to weigh both direction and significance
-gsea_input <- res_df %>%
+ranked_genes <- res_df %>%
   filter(!is.na(log2FoldChange), !is.na(pvalue)) %>%
-  mutate(rank_score = log2FoldChange * -log10(pvalue + 1e-300)) %>%
+  mutate(rank_score = log2FoldChange * -log10(pvalue + 1e-250)) %>%
   arrange(desc(rank_score))
 
 #convert gene symbols to entrez IDs
-gene_ids <- bitr(gsea_input$gene,
+id_mapping <- bitr(ranked_genes$gene,
                  fromType = "SYMBOL",
                  toType = "ENTREZID",
                  OrgDb = org.Mm.eg.db)
-
-gsea_input <- gsea_input %>%
-  left_join(gene_ids, by = c("gene" = "SYMBOL")) %>%
+ranked_genes <- ranked_genes %>%
+  left_join(id_mapping, by = c("gene" = "SYMBOL")) %>%
   filter(!is.na(ENTREZID)) %>%
   distinct(ENTREZID, .keep_all = TRUE)
-
-gene_list <- gsea_input$rank_score
-names(gene_list) <- gsea_input$ENTREZID
+ranked_vec <- ranked_genes$rank_score
+names(ranked_vec) <- ranked_genes$ENTREZID
 
 #GSEA on GO biological process terms
-gsea_go <- gseGO(geneList = gene_list,
+gsea_go <- gseGO(geneList = ranked_vec,
                  OrgDb = org.Mm.eg.db,
                  ont = "BP",
                  keyType = "ENTREZID",
@@ -163,21 +160,21 @@ gseaplot2(gsea_go,
 #compareCluster gives a side by side of whats going up vs down
 up_genes <- res_df %>%
   filter(padj < 0.05 & log2FoldChange > 1) %>%
-  left_join(gene_ids, by = c("gene" = "SYMBOL")) %>%
+  left_join(id_mapping, by = c("gene" = "SYMBOL")) %>%
   filter(!is.na(ENTREZID)) %>%
   pull(ENTREZID) %>%
   unique()
 
 down_genes <- res_df %>%
   filter(padj < 0.05 & log2FoldChange < -1) %>%
-  left_join(gene_ids, by = c("gene" = "SYMBOL")) %>%
+  left_join(id_mapping, by = c("gene" = "SYMBOL")) %>%
   filter(!is.na(ENTREZID)) %>%
   pull(ENTREZID) %>%
   unique()
 
 # background gene set for ORA
 all_genes <- res_df %>%
-  left_join(gene_ids, by = c("gene" = "SYMBOL")) %>%
+  left_join(id_mapping, by = c("gene" = "SYMBOL")) %>%
   filter(!is.na(ENTREZID)) %>%
   pull(ENTREZID) %>%
   unique()
